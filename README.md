@@ -3,3 +3,4 @@
 Progetto di esempio REST in javascript..
 
 picinali ok
+paolo ok
