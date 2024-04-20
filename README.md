@@ -5,3 +5,4 @@ Progetto di esempio REST in javascript..
 picinali ok
 paolo ok
 Xhihani ok
+picinali ok
