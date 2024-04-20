@@ -1,6 +1,6 @@
 function endpoint(app, connpool) {
 
-    app.post("/api/tasks", (req, res) => {
+    app.post("/api/persona", (req, res) => {
         var errors = []
         /* controllo dati inseriti
         if (!req.body.description) {
