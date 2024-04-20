@@ -39,7 +39,7 @@ function endpoint(app, connpool) {
 
 
     app.get("/api/tasks", (req, res, next) => {
-        var sql = "select * from task"
+        var sql = "select * from persona"
         var params = []
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -55,7 +55,7 @@ function endpoint(app, connpool) {
 
 
     app.get("/api/tasks/:id", (req, res) => {
-        var sql = "select * from task where task_id = ?"
+        var sql = "select * from persona where idpersona = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -76,7 +76,7 @@ function endpoint(app, connpool) {
             status: req.body.status,
         }
         connpool.execute(
-            `UPDATE task set 
+            `UPDATE persona set 
                description = COALESCE(?,description), 
                status = COALESCE(?,status) 
                WHERE task_id = ?`,
