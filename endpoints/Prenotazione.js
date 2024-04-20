@@ -19,7 +19,7 @@ function endpoint(app, connpool) {
             status: req.body.status,
         }
 
-        var sql = 'INSERT INTO task (description, status) VALUES (?,?)'
+        var sql = 'INSERT INTO Prenotazione (IDPersona, IDCarrello, Data) VALUES (?, ?, ?)';
         var params = [data.description, data.status]
         connpool.query(sql, params, (error, results) => {
             if (error) {
