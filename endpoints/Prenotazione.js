@@ -1,6 +1,6 @@
 function endpoint(app, connpool) {
 
-    app.post("/api/tasks", (req, res) => {
+    app.post("/api/Prenotazione", (req, res) => {
         var errors = []
         // controllo dati inseriti
         if (!req.body.description) {
@@ -15,12 +15,13 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            IDPersona: req.body.status,
+            Data: req.body.status,
+            IDCarrello: req.body.status,
         }
 
         var sql = 'INSERT INTO Prenotazione (IDPersona, IDCarrello, Data) VALUES (?, ?, ?)';
-        var params = [data.description, data.status]
+        var params = [data.IDPersona, data.IDCarrello, data.Data]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -38,8 +39,8 @@ function endpoint(app, connpool) {
 
 
 
-    app.get("/api/tasks", (req, res, next) => {
-        var sql = "select * from task"
+    app.get("/api/Prenotazione", (req, res, next) => {
+        var sql = "select * from Prenotazione"
         var params = []
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -54,8 +55,8 @@ function endpoint(app, connpool) {
     });
 
 
-    app.get("/api/tasks/:id", (req, res) => {
-        var sql = "select * from task where task_id = ?"
+    app.get("/api/Prenotazione/:IDPrenotazione", (req, res) => {
+        var sql = "select * from Prenotazione where IDPrenotazione = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -70,16 +71,16 @@ function endpoint(app, connpool) {
     });
 
 
-    app.put("/api/tasks/:id", (req, res) => {
+    app.put("/api/Prenotazione/:IDPrenotazione", (req, res) => {
         var data = {
             description: req.body.description,
             status: req.body.status,
         }
         connpool.execute(
-            `UPDATE task set 
+            `UPDATE Prenotazione set 
                description = COALESCE(?,description), 
                status = COALESCE(?,status) 
-               WHERE task_id = ?`,
+               WHERE IDPrenotaziome = ?`,
             [data.description, data.status, req.params.id],
             function (err, result) {
                 if (err){
@@ -97,9 +98,9 @@ function endpoint(app, connpool) {
 
 
 
-    app.delete("/api/tasks/:id", (req, res) => {
+    app.delete("/api/Prenotazione/:IDPrenotazione", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE task_id = ?',
+            'DELETE FROM Prenotazione WHERE IDPrenotazione = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
