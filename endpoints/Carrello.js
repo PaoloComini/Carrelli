@@ -1,6 +1,6 @@
 function endpoint(app, connpool) {
 
-    app.post("/api/tasks", (req, res) => {
+    app.post("/api/Carrello", (req, res) => {
         var errors = []
       //  controllo dati inseriti
         if (!req.body.description) {
@@ -38,8 +38,8 @@ function endpoint(app, connpool) {
 
 
 
-    app.get("/api/tasks", (req, res, next) => {
-        var sql = "select * from task"
+    app.get("/api/Carrello", (req, res, next) => {
+        var sql = "select * from carrello"
         var params = []
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -54,8 +54,8 @@ function endpoint(app, connpool) {
     });
 
 
-    app.get("/api/tasks/:id", (req, res) => {
-        var sql = "select * from task where task_id = ?"
+    app.get("/api/Carrello/:id", (req, res) => {
+        var sql = "select * from Carrello where IdCarrello = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -70,13 +70,13 @@ function endpoint(app, connpool) {
     });
 
 
-    app.put("/api/tasks/:id", (req, res) => {
+    app.put("/api/Carrello/:id", (req, res) => {
         var data = {
             description: req.body.description,
             status: req.body.status,
         }
         connpool.execute(
-            `UPDATE task set 
+            `UPDATE carrello set 
                description = COALESCE(?,description), 
                status = COALESCE(?,status) 
                WHERE task_id = ?`,
@@ -97,9 +97,9 @@ function endpoint(app, connpool) {
 
 
 
-    app.delete("/api/tasks/:id", (req, res) => {
+    app.delete("/api/Carrello/:id", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE task_id = ?',
+            'DELETE FROM carrello WHERE IdCarrello = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
