@@ -38,7 +38,7 @@ function endpoint(app, connpool) {
 
 
 
-    app.get("/api/tasks", (req, res, next) => {
+    app.get("/api/persona", (req, res, next) => {
         var sql = "select * from persona"
         var params = []
         connpool.query(sql, params, (err, rows) => {
@@ -54,7 +54,7 @@ function endpoint(app, connpool) {
     });
 
 
-    app.get("/api/tasks/:id", (req, res) => {
+    app.get("/api/tasks/:idpersona", (req, res) => {
         var sql = "select * from persona where idpersona = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
@@ -70,7 +70,7 @@ function endpoint(app, connpool) {
     });
 
 
-    app.put("/api/tasks/:id", (req, res) => {
+    app.put("/api/tasks/:idpersona", (req, res) => {
         var data = {
             description: req.body.description,
             status: req.body.status,
@@ -79,7 +79,7 @@ function endpoint(app, connpool) {
             `UPDATE persona set 
                description = COALESCE(?,description), 
                status = COALESCE(?,status) 
-               WHERE task_id = ?`,
+               WHERE idpersona = ?`,
             [data.description, data.status, req.params.id],
             function (err, result) {
                 if (err){
@@ -97,9 +97,9 @@ function endpoint(app, connpool) {
 
 
 
-    app.delete("/api/tasks/:id", (req, res) => {
+    app.delete("/api/persona/:idpersona", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE task_id = ?',
+            'DELETE FROM task WHERE idpersona = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
