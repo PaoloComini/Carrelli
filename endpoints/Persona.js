@@ -2,14 +2,14 @@ function endpoint(app, connpool) {
 
     app.post("/api/persona", (req, res) => {
         var errors = []
-        /* controllo dati inseriti
+        // controllo dati inseriti
         if (!req.body.description) {
             errors.push("No description specified");
         }
         if (req.body.status === "") {
             errors.push("No status specified");
         }
-        */
+        
         if (errors.length) {
             res.status(400).json({ "error": errors.join(",") });
             return;
@@ -54,8 +54,8 @@ function endpoint(app, connpool) {
     });
 
 
-    app.get("/api/tasks/:idpersona", (req, res) => {
-        var sql = "select * from persona where idpersona = ?"
+    app.get("/api/persona/:id", (req, res) => {
+        var sql = "select * from persona where IDPersona = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -70,7 +70,7 @@ function endpoint(app, connpool) {
     });
 
 
-    app.put("/api/tasks/:idpersona", (req, res) => {
+    app.put("/api/persona/:id", (req, res) => {
         var data = {
             description: req.body.description,
             status: req.body.status,
@@ -97,9 +97,9 @@ function endpoint(app, connpool) {
 
 
 
-    app.delete("/api/persona/:idpersona", (req, res) => {
+    app.delete("/api/persona/:id", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE idpersona = ?',
+            'DELETE FROM task WHERE IDPersona = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
