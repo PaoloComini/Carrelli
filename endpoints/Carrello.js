@@ -3,24 +3,20 @@ function endpoint(app, connpool) {
     app.post("/api/Carrello", (req, res) => {
         var errors = []
       //  controllo dati inseriti
-        if (!req.body.description) {
-            errors.push("No description specified");
+        if (!req.body.NumComputer) {
+            errors.push("No NumPosti specified");
         }
-        if (req.body.status === "") {
-            errors.push("No status specified");
-        }
-        
+
         if (errors.length) {
             res.status(400).json({ "error": errors.join(",") });
             return;
         }
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            NumComputer: req.body.NumComputer,
         }
 
-        var sql = 'INSERT INTO Carrello (IdCarrello, NumPosti) VALUES (?,?)'
-        var params = [IDCarrello]
+        var sql = 'INSERT INTO Carrello (NumComputer) VALUES (?)'
+        var params = [data.NumComputer]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -105,6 +101,7 @@ function endpoint(app, connpool) {
                 if (err){
                     res.status(400).json({"error": err.message})
                     return;
+
                 }
                 res.json({"message":"deleted", changes: result.affectedRows})
         });
