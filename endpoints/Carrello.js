@@ -2,14 +2,14 @@ function endpoint(app, connpool) {
 
     app.post("/api/tasks", (req, res) => {
         var errors = []
-        /* controllo dati inseriti
+      //  controllo dati inseriti
         if (!req.body.description) {
             errors.push("No description specified");
         }
         if (req.body.status === "") {
             errors.push("No status specified");
-        }...
-        */
+        }
+        
         if (errors.length) {
             res.status(400).json({ "error": errors.join(",") });
             return;
