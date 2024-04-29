@@ -2,11 +2,8 @@ function endpoint(app, connpool) {
 
     app.post("/api/Prenotazione", (req, res) => {
         var errors = []
-        // controllo dati inseriti
-        if (!req.body.IDCarrello) {
-            errors.push("Nessun ID inserito");
-        }
-        if (req.body.IDCarrello === "") {
+        
+        if (!req.body.IDCarrello || req.body.IDCarrello === "") {
             errors.push("Nessun ID inserito");
         }
         
@@ -14,14 +11,15 @@ function endpoint(app, connpool) {
             res.status(400).json({ "error": errors.join(",") });
             return;
         }
+        
         var data = {
-            IDPersona: req.body.IDPersona,
             Data: req.body.Data,
+            IDPersona: req.body.IDPersona,
             IDCarrello: req.body.IDCarrello,
         }
 
-        var sql = 'INSERT INTO Prenotazione (IDPersona, IDCarrello, Data) VALUES (?, ?, ?)';
-        var params = [data.IDPersona, data.IDCarrello, data.Data]
+        var sql = 'INSERT INTO Prenotazione (Data, IDPersona, IDCarrello) VALUES (?, ?, ?)';
+        var params = [data.Data, data.IDPersona, data.IDCarrello]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -30,46 +28,41 @@ function endpoint(app, connpool) {
             res.json({
                 "message": "success",
                 "data": data,
-                "id": this.insertID
+                "id": results.insertId
             })
             console.log(results)
         });
 
     })
 
-
-
-    app.get("/api/Prenotazione", (req, res, next) => {
+    app.get("/api/Prenotazione", (req, res) => {
         var sql = "select * from Prenotazione"
-        var params = []
-        connpool.query(sql, params, (err, rows) => {
+        connpool.query(sql, (err, rows) => {
             if (err) {
-              res.status(400).json({"error":err.message});
-              return;
+                res.status(400).json({"error": err.message});
+                return;
             }
             res.json({
-                "message":"success",
-                "data":rows
+                "message": "success",
+                "data": rows
             })
-          });
+        });
     });
-
 
     app.get("/api/Prenotazione/:IDPrenotazione", (req, res) => {
         var sql = "select * from Prenotazione where IDPrenotazione = ?"
-        var params = [req.params.id]
+        var params = [req.params.IDPrenotazione]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
-              res.status(400).json({"error":err.message});
-              return;
+                res.status(400).json({"error": err.message});
+                return;
             }
             res.json({
-                "message":"success",
-                "data":rows[0]
+                "message": "success",
+                "data": rows[0]
             })
-          });
+        });
     });
-
 
     app.put("/api/Prenotazione/:IDPrenotazione", (req, res) => {
         var data = {
@@ -77,47 +70,39 @@ function endpoint(app, connpool) {
             Data: req.body.Data,
             IDCarrello: req.body.IDCarrello,
         }
-        connpool.execute(
+        connpool.query(
             `UPDATE Prenotazione set 
-               IDPersona = COALESCE(?,IDPersona), 
-               Data = COALESCE(?,Data),
-               IDCarrello = COALESCE(?,IDCarrello), 
-               WHERE IDPrenotaziome = ?`,
-            [data.IDPersona, data.Data, req.params.IDCarrello],
+               IDPersona = ?, 
+               Data = ?,
+               IDCarrello = ? 
+               WHERE IDPrenotazione = ?`,
+            [data.IDPersona, data.Data, data.IDCarrello, req.params.IDPrenotazione],
             function (err, result) {
-                if (err){
+                if (err) {
                     res.status(400).json({"error": err.message})
                     return;
                 }
-                console.log(result )
                 res.json({
                     message: "success",
                     data: data,
                     changes: result.affectedRows
                 })
-        });
-    })
-
-
+            });
+    });
 
     app.delete("/api/Prenotazione/:IDPrenotazione", (req, res) => {
-        connpool.execute(
+        connpool.query(
             'DELETE FROM Prenotazione WHERE IDPrenotazione = ?',
-            [req.params.id],
+            [req.params.IDPrenotazione],
             function (err, result) {
-                if (err){
+                if (err) {
                     res.status(400).json({"error": err.message})
                     return;
                 }
-                res.json({"message":"deleted", changes: result.affectedRows})
-        });
-    })
-
+                res.json({"message": "deleted", changes: result.affectedRows})
+            });
+    });
 
 }
-
-
-
-
 
 module.exports = endpoint;
