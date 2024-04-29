@@ -3,11 +3,11 @@ function endpoint(app, connpool) {
     app.post("/api/Prenotazione", (req, res) => {
         var errors = []
         // controllo dati inseriti
-        if (!req.body.description) {
-            errors.push("No description specified");
+        if (!req.body.IDCarrello) {
+            errors.push("Nessun ID inserito");
         }
-        if (req.body.status === "") {
-            errors.push("No status specified");
+        if (req.body.IDCarrello === "") {
+            errors.push("Nessun ID inserito");
         }
         
         if (errors.length) {
@@ -15,9 +15,9 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            IDPersona: req.body.status,
-            Data: req.body.status,
-            IDCarrello: req.body.status,
+            IDPersona: req.body.IDPersona,
+            Data: req.body.Data,
+            IDCarrello: req.body.IDCarrello,
         }
 
         var sql = 'INSERT INTO Prenotazione (IDPersona, IDCarrello, Data) VALUES (?, ?, ?)';
@@ -73,15 +73,17 @@ function endpoint(app, connpool) {
 
     app.put("/api/Prenotazione/:IDPrenotazione", (req, res) => {
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            IDPersona: req.body.IDPersona,
+            Data: req.body.Data,
+            IDCarrello: req.body.IDCarrello,
         }
         connpool.execute(
             `UPDATE Prenotazione set 
-               description = COALESCE(?,description), 
-               status = COALESCE(?,status) 
+               IDPersona = COALESCE(?,IDPersona), 
+               Data = COALESCE(?,Data),
+               IDCarrello = COALESCE(?,IDCarrello), 
                WHERE IDPrenotaziome = ?`,
-            [data.description, data.status, req.params.id],
+            [data.IDPersona, data.Data, req.params.IDCarrello],
             function (err, result) {
                 if (err){
                     res.status(400).json({"error": err.message})
