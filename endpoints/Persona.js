@@ -3,11 +3,17 @@ function endpoint(app, connpool) {
     app.post("/api/persona", (req, res) => {
         var errors = []
         // controllo dati inseriti
-        if (!req.body.description) {
+        if (!req.body.Nome) {
             errors.push("No description specified");
         }
-        if (req.body.status === "") {
-            errors.push("No status specified");
+        if (!req.body.Cognome) {
+            errors.push("No description specified");
+        }
+        if (!req.body.Password) {
+            errors.push("No description specified");
+        }
+        if (!req.body.Email) {
+            errors.push("No description specified");
         }
         
         if (errors.length) {
@@ -15,8 +21,10 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            Nome: req.body.Nome,
+            Cognome: req.body.cognome,
+            Password: req.body.Password,
+            Email: req.body.Email,
         }
 
         var sql = 'INSERT INTO Persona (IDPersona,Nome,Cognome,Password,Email) VALUES (1,Andrea,Picinali,1234,andreapicinali@gmail.com)'
@@ -72,9 +80,12 @@ function endpoint(app, connpool) {
 
     app.put("/api/persona/:id", (req, res) => {
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            Nome: req.body.Nome,
+            Cognome: req.body.cognome,
+            Password: req.body.Password,
+            Email: req.body.Email,
         }
+        
         connpool.execute(
             `UPDATE persona set 
                description = COALESCE(?,description), 
