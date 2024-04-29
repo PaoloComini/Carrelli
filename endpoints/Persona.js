@@ -2,7 +2,7 @@ function endpoint(app, connpool) {
 
     app.post("/api/persona", (req, res) => {
         var errors = []
-        // controllo dati inseriti
+        /* controllo dati inseriti
         if (!req.body.Nome) {
             errors.push("No description specified");
         }
@@ -20,11 +20,14 @@ function endpoint(app, connpool) {
             res.status(400).json({ "error": errors.join(",") });
             return;
         }
+    ]*/
         var data = {
             Nome: req.body.Nome,
             Cognome: req.body.cognome,
             Password: req.body.Password,
             Email: req.body.Email,
+            description: req.body.description,
+            status: req.body.status,
         }
 
         var sql = 'INSERT INTO Persona (IDPersona,Nome,Cognome,Password,Email) VALUES (1,Andrea,Picinali,1234,andreapicinali@gmail.com)'
