@@ -26,12 +26,11 @@ function endpoint(app, connpool) {
             Cognome: req.body.cognome,
             Password: req.body.Password,
             Email: req.body.Email,
-            description: req.body.description,
-            status: req.body.status,
+            
         }
 
-        var sql = 'INSERT INTO Persona (IDPersona,Nome,Cognome,Password,Email) VALUES (1,Andrea,Picinali,1234,andreapicinali@gmail.com)'
-        var params = [data.description, data.status]
+        var sql = 'INSERT INTO Persona (Nome,Cognome,Password,Email) VALUES (?,?,?,?)'
+        var params = [data.Nome, data.Cognome,data.Password,data.Email]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -94,7 +93,7 @@ function endpoint(app, connpool) {
                description = COALESCE(?,description), 
                status = COALESCE(?,status) 
                WHERE idpersona = ?`,
-            [data.description, data.status, req.params.id],
+            [data.Nome, data.Cognome,data.Password,data.Email, req.params.id],
             function (err, result) {
                 if (err){
                     res.status(400).json({"error": err.message})
@@ -123,9 +122,10 @@ function endpoint(app, connpool) {
                 res.json({"message":"deleted", changes: result.affectedRows})
         });
     })
-
-
 }
+
+
+
 
 
 
