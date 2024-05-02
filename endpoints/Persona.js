@@ -112,7 +112,7 @@ function endpoint(app, connpool) {
 
     app.delete("/api/persona/:id", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE IDPersona = ?',
+            'DELETE FROM persona WHERE IDPersona = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
