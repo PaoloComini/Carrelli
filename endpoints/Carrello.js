@@ -3,7 +3,9 @@ function endpoint(app, connpool) {
     app.post("/api/Carrello", (req, res) => {
         var errors = []
       //  controllo dati inseriti
-        if (!req.body.NumComputer) {
+        if (!req.body.NumComputer
+        
+        ) {
             errors.push("No NumPosti specified");
         }
 
@@ -68,14 +70,14 @@ function endpoint(app, connpool) {
 
     app.put("/api/Carrello/:id", (req, res) => {
         var data = {
-            description: req.body.description,
+            description: req.bod,
             status: req.body.status,
         }
         connpool.execute(
             `UPDATE carrello set 
                description = COALESCE(?,description), 
                status = COALESCE(?,status) 
-               WHERE task_id = ?`,
+               WHERE idCarrello = ?`,
             [data.description, data.status, req.params.id],
             function (err, result) {
                 if (err){
