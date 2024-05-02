@@ -90,8 +90,7 @@ function endpoint(app, connpool) {
         
         connpool.execute(
             `UPDATE persona set 
-               description = COALESCE(?,description), 
-               status = COALESCE(?,status) 
+               description = COALESCE(?,nome,cognome,password,email), 
                WHERE idpersona = ?`,
             [data.Nome, data.Cognome,data.Password,data.Email, req.params.id],
             function (err, result) {
@@ -107,13 +106,39 @@ function endpoint(app, connpool) {
                 })
         });
     })
-
+    app.put("/api/persona/:id", (req, res) => {
+        var data = {
+            IDPersona: req.body.IDPersona,
+            Data: req.body.Data,
+            IDCarrello: req.body.IDCarrello,
+        }
+        connpool.query(
+            `UPDATE per set 
+               nome = ?, 
+               cognome = ?,
+               password = ?,
+               email =?
+               WHERE IDpersona = ?`,
+            [req.body.Nome, req.body.cognome,req.body.Password,req.body.Email,],
+            function (err, result) {
+                if (err) {
+                    res.status(400).json({"error": err.message})
+                    return;
+                }
+                res.json({
+                    message: "success",
+                    data: data,
+                    changes: result.affectedRows
+                })
+            });
+    });
 
 
     app.delete("/api/persona/:id", (req, res) => {
         connpool.execute(
             'DELETE FROM persona WHERE IDPersona = ?',
             [req.params.id],
+
             function (err, result) {
                 if (err){
                     res.status(400).json({"error": err.message})
