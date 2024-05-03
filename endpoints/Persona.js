@@ -113,13 +113,13 @@ function endpoint(app, connpool) {
             IDCarrello: req.body.IDCarrello,
         }
         connpool.query(
-            `UPDATE per set 
+            `UPDATE persona set 
                nome = ?, 
                cognome = ?,
                password = ?,
                email =?
-               WHERE IDpersona = ?`,
-            [req.body.Nome, req.body.cognome,req.body.Password,req.body.Email,],
+               WHERE IDPersona = ?`,
+            [req.body.Nome, req.body.Cognome,req.body.Password,req.body.Email,],
             function (err, result) {
                 if (err) {
                     res.status(400).json({"error": err.message})
