@@ -70,15 +70,15 @@ function endpoint(app, connpool) {
 
     app.put("/api/Carrello/:id", (req, res) => {
         var data = {
-            description: req.bod,
-            status: req.body.status,
+            "NumComputer": req.body.NumComputer  
         }
+        console.log(data.NumComputer)
         connpool.execute(
-            `UPDATE carrello set 
-               description = COALESCE(?,description), 
-               status = COALESCE(?,status) 
-               WHERE idCarrello = ?`,
-            [data.description, data.status, req.params.id],
+            `UPDATE carrello 
+            SET NumComputer = COALESCE(?, NumComputer)
+            WHERE idCarrello = ?
+            `,
+            [data.NumComputer],
             function (err, result) {
                 if (err){
                     res.status(400).json({"error": err.message})
@@ -92,7 +92,7 @@ function endpoint(app, connpool) {
                 })
         });
     })
-
+    
 
 
     app.delete("/api/Carrello/:id", (req, res) => {
