@@ -76,14 +76,16 @@ function endpoint(app, connpool) {
         connpool.execute(
             `UPDATE carrello 
             SET NumComputer = COALESCE(?, NumComputer)
-            WHERE idCarrello = ?
+            WHERE IDCarrello = ?
             `,
             [data.NumComputer],
             function (err, result) {
                 if (err){
+                    console.log("errore"+ err.message)
                     res.status(400).json({"error": err.message})
                     return;
                 }
+                console.log("success")
                 console.log(result )
                 res.json({
                     message: "success",
