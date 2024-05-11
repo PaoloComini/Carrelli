@@ -78,10 +78,11 @@ function endpoint(app, connpool) {
             SET NumComputer = COALESCE(?, NumComputer)
             WHERE IDCarrello = ?
             `,
-            [data.NumComputer],
+            [data.NumComputer,req.params.id],
             function (err, result) {
                 if (err){
-                    console.log("errore"+ err.message)
+                     
+                    console.log("errore")
                     res.status(400).json({"error": err.message})
                     return;
                 }
