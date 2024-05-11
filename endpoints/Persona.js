@@ -80,37 +80,14 @@ function endpoint(app, connpool) {
     });
 
 
+   
+
     app.put("/api/persona/:id", (req, res) => {
         var data = {
-            Nome: req.body.Nome,
-            Cognome: req.body.cognome,
-            Password: req.body.Password,
-            Email: req.body.Email,
-        }
-        
-        connpool.execute(
-            `UPDATE persona set 
-               description = COALESCE(?,nome,cognome,password,email), 
-               WHERE idpersona = ?`,
-            [data.Nome, data.Cognome,data.Password,data.Email, req.params.id],
-            function (err, result) {
-                if (err){
-                    res.status(400).json({"error": err.message})
-                    return;
-                }
-                console.log(result )
-                res.json({
-                    message: "success",
-                    data: data,
-                    changes: result.affectedRows
-                })
-        });
-    })
-    app.put("/api/persona/:id", (req, res) => {
-        var data = {
-            IDPersona: req.body.IDPersona,
-            Data: req.body.Data,
-            IDCarrello: req.body.IDCarrello,
+            nome: req.body.nome,
+            cognome: req.body.cognome,
+            password: req.body.password,
+            email: req.body.email
         }
         connpool.query(
             `UPDATE persona set 
@@ -119,7 +96,7 @@ function endpoint(app, connpool) {
                password = ?,
                email =?
                WHERE IDPersona = ?`,
-            [req.body.Nome, req.body.Cognome,req.body.Password,req.body.Email,],
+            [req.body.nome, req.body.cognome,req.body.password,req.body.email,req.params.id],
             function (err, result) {
                 if (err) {
                     res.status(400).json({"error": err.message})
